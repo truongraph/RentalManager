@@ -2,10 +2,12 @@
 from database.db import get_db
 from datetime import datetime
 
+
 # Lấy toàn bộ hóa đơn (kèm tên phòng + tên khách)
 def get_all_bills():
     conn = get_db()
-    return conn.execute("""
+    return conn.execute(
+        """
         SELECT b.*, r.name_room, t.full_name, c.rent as contract_rent
         FROM bill b
         JOIN contract c ON b.contract_id = c.contract_id
@@ -13,13 +15,15 @@ def get_all_bills():
         JOIN tenant t ON c.tenant_id = t.tenant_id
         WHERE b.is_deleted = 0
         ORDER BY b.bill_id DESC
-    """).fetchall()
+    """
+    ).fetchall()
 
 
 # Lấy hợp đồng đang active + số điện/nước kỳ trước để tạo hóa đơn mới
 def get_active_contracts_with_last_bill():
     conn = get_db()
-    return conn.execute("""
+    return conn.execute(
+        """
         SELECT 
             c.contract_id,
             r.name_room,
@@ -42,17 +46,21 @@ def get_active_contracts_with_last_bill():
         ) lb ON c.contract_id = lb.contract_id AND lb.rn = 1
         WHERE c.contract_status = 'active' AND c.is_deleted = 0
         ORDER BY r.name_room
-    """).fetchall()
+    """
+    ).fetchall()
 
 
 # Tính tháng hóa đơn kế tiếp cho hợp đồng
 def get_next_bill_month(contract_id: int) -> str:
     conn = get_db()
-    row = conn.execute("""
+    row = conn.execute(
+        """
         SELECT bill_month FROM bill 
         WHERE contract_id = ? AND is_deleted = 0
         ORDER BY bill_month DESC LIMIT 1
-    """, (contract_id,)).fetchone()
+    """,
+        (contract_id,),
+    ).fetchone()
 
     if not row:
         today = datetime.today()
@@ -71,9 +79,12 @@ def get_next_bill_month(contract_id: int) -> str:
 # Kiểm tra hóa đơn tháng đó đã tồn tại chưa
 def bill_exists(contract_id: int, bill_month: str) -> bool:
     conn = get_db()
-    row = conn.execute("""
+    row = conn.execute(
+        """
         SELECT 1 FROM bill WHERE contract_id = ? AND bill_month = ? AND is_deleted = 0
-    """, (contract_id, bill_month)).fetchone()
+    """,
+        (contract_id, bill_month),
+    ).fetchone()
     return row is not None
 
 
@@ -81,27 +92,37 @@ def bill_exists(contract_id: int, bill_month: str) -> bool:
 def create_bill(data: dict):
     conn = get_db()
     total = (
-        data['room_rent_amount'] +
-        (data['elec_current'] - data['elec_prev']) * data['electric_unit_price'] +
-        (data['water_current'] - data['water_prev']) * data['water_unit_price'] +
-        data.get('other_fee', 0)
+        data["room_rent_amount"]
+        + (data["elec_current"] - data["elec_prev"]) * data["electric_unit_price"]
+        + (data["water_current"] - data["water_prev"]) * data["water_unit_price"]
+        + data.get("other_fee", 0)
     )
 
-    conn.execute("""
+    conn.execute(
+        """
         INSERT INTO bill (
             bill_code, contract_id, bill_month,
             elec_prev, elec_current, water_prev, water_current,
             electric_unit_price, water_unit_price,
             room_rent_amount, other_fee, total_amount, note
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        data['bill_code'], data['contract_id'], data['bill_month'],
-        data['elec_prev'], data['elec_current'],
-        data['water_prev'], data['water_current'],
-        data['electric_unit_price'], data['water_unit_price'],
-        data['room_rent_amount'], data.get('other_fee', 0),
-        total, data.get('note')
-    ))
+    """,
+        (
+            data["bill_code"],
+            data["contract_id"],
+            data["bill_month"],
+            data["elec_prev"],
+            data["elec_current"],
+            data["water_prev"],
+            data["water_current"],
+            data["electric_unit_price"],
+            data["water_unit_price"],
+            data["room_rent_amount"],
+            data.get("other_fee", 0),
+            total,
+            data.get("note"),
+        ),
+    )
     conn.commit()
 
 
@@ -109,25 +130,35 @@ def create_bill(data: dict):
 def update_bill(bill_id: int, data: dict):
     conn = get_db()
     total = (
-        data['room_rent_amount'] +
-        (data['elec_current'] - data['elec_prev']) * data['electric_unit_price'] +
-        (data['water_current'] - data['water_prev']) * data['water_unit_price'] +
-        data.get('other_fee', 0)
+        data["room_rent_amount"]
+        + (data["elec_current"] - data["elec_prev"]) * data["electric_unit_price"]
+        + (data["water_current"] - data["water_prev"]) * data["water_unit_price"]
+        + data.get("other_fee", 0)
     )
 
-    conn.execute("""
+    conn.execute(
+        """
         UPDATE bill SET
             bill_month=?, elec_prev=?, elec_current=?, water_prev=?, water_current=?,
             electric_unit_price=?, water_unit_price=?, room_rent_amount=?,
             other_fee=?, total_amount=?, note=?
         WHERE bill_id=?
-    """, (
-        data['bill_month'], data['elec_prev'], data['elec_current'],
-        data['water_prev'], data['water_current'],
-        data['electric_unit_price'], data['water_unit_price'],
-        data['room_rent_amount'], data.get('other_fee', 0),
-        total, data.get('note'), bill_id
-    ))
+    """,
+        (
+            data["bill_month"],
+            data["elec_prev"],
+            data["elec_current"],
+            data["water_prev"],
+            data["water_current"],
+            data["electric_unit_price"],
+            data["water_unit_price"],
+            data["room_rent_amount"],
+            data.get("other_fee", 0),
+            total,
+            data.get("note"),
+            bill_id,
+        ),
+    )
     conn.commit()
 
 
@@ -141,11 +172,14 @@ def delete_bill(bill_id: int):
 # Đánh dấu hóa đơn đã thu tiền
 def mark_bill_paid(bill_id: int):
     conn = get_db()
-    conn.execute("""
+    conn.execute(
+        """
         UPDATE bill SET 
             paid_status = 'paid', 
             paid_amount = total_amount, 
             paid_ymd = date('now')
         WHERE bill_id = ?
-    """, (bill_id,))
+    """,
+        (bill_id,),
+    )
     conn.commit()

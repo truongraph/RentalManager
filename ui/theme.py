@@ -5,13 +5,18 @@ import os
 import sys
 import ctypes
 from config import FONT_PATH, FONT_FAMILY, PRIMARY_COLOR
-# Đăng ký font Inter vào hệ thống
+
+
+# =====================================#
+# =====================================#
+# =====================================#
 def register_font():
+
     if not os.path.exists(FONT_PATH):
         print(f"Warning: Font not found: {FONT_PATH}")
         return False
 
-    if sys.platform.startswith('win'):
+    if sys.platform.startswith("win"):
         try:
             result = ctypes.windll.gdi32.AddFontResourceW(FONT_PATH)
             if result > 0:
@@ -27,7 +32,9 @@ def register_font():
     return False
 
 
-# Cấu hình theme + appearance
+# =====================================#
+# =====================================#
+# =====================================#
 def setup_theme(root=None):
     register_font()
     ctk.set_appearance_mode("light")

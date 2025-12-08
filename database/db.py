@@ -5,7 +5,7 @@ import os
 import sys
 
 # Đường dẫn đúng dù chạy từ source hay từ .exe
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     # Đang chạy từ file .exe → lấy thư mục tạm
     BASE_PATH = Path(sys._MEIPASS)
 else:

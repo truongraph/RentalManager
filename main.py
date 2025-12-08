@@ -3,11 +3,15 @@ import sys
 import signal
 from ui.login import LoginPage
 from ui.theme import register_font
-#-----------------------------
+#=====================================#
+#=====================================#
+#=====================================#
 def signal_handler(sig, frame):
     print("\n\nĐã dừng chương trình. Tạm biệt nheeeeeeee hehe!")
     sys.exit(0)
-
+#=====================================#
+#=====================================#
+#=====================================#
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
     try:
