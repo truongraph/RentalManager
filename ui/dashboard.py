@@ -22,7 +22,7 @@ class Dashboard(ctk.CTk):
             pass
 
         self.state('zoomed')
-        self.configure(fg_color="#DFEAFE")
+        self.configure(fg_color="#e8f5ff")
         self.grid_rowconfigure(2, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
@@ -39,7 +39,7 @@ class Dashboard(ctk.CTk):
 
     # Header
     def _create_header(self):
-        header = ctk.CTkFrame(self, height=100, corner_radius=0, fg_color="#2F66C8")
+        header = ctk.CTkFrame(self, height=100, corner_radius=0, fg_color="#042549")
         header.grid(row=0, column=0, sticky="ew")
         header.pack_propagate(False)
 
@@ -58,7 +58,7 @@ class Dashboard(ctk.CTk):
 
     # Thanh menu ngang
     def _create_menu(self):
-        menu = ctk.CTkFrame(self, height=70, corner_radius=0, fg_color="#5188EE")
+        menu = ctk.CTkFrame(self, height=50, corner_radius=0, fg_color="#3279BB")
         menu.grid(row=1, column=0, sticky="ew")
         menu.pack_propagate(False)
 
@@ -66,24 +66,24 @@ class Dashboard(ctk.CTk):
         container.place(relx=0.5, rely=0.5, anchor="center")
 
         items = [
-            ("Trang chủ", self._load_home),
+            ("Bảng điều khiển", self._load_home),
             ("Quản lý phòng", self._load_room),
             ("Quản lý khách", self._load_tenant),
-            ("Hợp đồng", self._load_contract),
-            ("Hóa đơn", self._load_bill),
-            ("Báo cáo", self._load_report),
+            ("Quản lý hợp đồng", self._load_contract),
+            ("Quản lý hóa đơn", self._load_bill),
+            ("Báo cáo thống kê", self._load_report),
         ]
 
         for text, cmd in items:
-            btn = ctk.CTkButton(container, text=text, width=180, height=50, corner_radius=12,
+            btn = ctk.CTkButton(container, text=text, width=180, height=40, corner_radius=7,
                                 font=("Inter", 15, "bold"), fg_color="transparent",
-                                hover_color="#2F66C8", text_color="white",
+                                hover_color="#F58220", text_color="white",
                                 command=lambda c=cmd: self._set_active(c))
             btn.pack(side="left", padx=15)
             btn.cmd = cmd
-            if text == "Trang chủ":
+            if text == "Bảng điều khiển":
                 self.active_button = btn
-                btn.configure(fg_color="#2F66C8")
+                btn.configure(fg_color="#F58220")
 
     # Highlight nút đang được chọn
     def _set_active(self, cmd):
@@ -96,7 +96,7 @@ class Dashboard(ctk.CTk):
                         for b in c.winfo_children():
                             if isinstance(b, ctk.CTkButton) and hasattr(b, 'cmd') and b.cmd == cmd:
                                 self.active_button = b
-                                b.configure(fg_color="#2F66C8")
+                                b.configure(fg_color="#F58220")
                                 break
         cmd()
 

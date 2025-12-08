@@ -27,43 +27,59 @@ class RoomTab(ctk.CTkFrame):
         form.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         # Hàng 1
-        ctk.CTkLabel(form, text="Tên phòng *", font=("Inter", 14, "bold")).grid(row=0, column=0, sticky="w", pady=(0, 5))
-        self.entry_name = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
+        ctk.CTkLabel(form, text="Tên phòng *", font=("Inter", 14, "bold")).grid(row=0, column=0, sticky="w",
+                                                                                pady=(0, 5))
+        self.entry_name = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: Phòng 101")
         self.entry_name.grid(row=1, column=0, sticky="ew", pady=(0, 20))
 
-        ctk.CTkLabel(form, text="Số tầng (VD: 1)", font=("Inter", 14, "bold")).grid(row=0, column=1, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_floor = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
+        ctk.CTkLabel(form, text="Số tầng (VD: 1)", font=("Inter", 14, "bold")).grid(row=0, column=1, sticky="w",
+                                                                                    pady=(0, 5), padx=(30, 0))
+        self.entry_floor = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                        placeholder_text="VD: 1")
         self.entry_floor.grid(row=1, column=1, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Diện tích (m²)", font=("Inter", 14, "bold")).grid(row=0, column=2, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_area = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
+        ctk.CTkLabel(form, text="Diện tích (m²)", font=("Inter", 14, "bold")).grid(row=0, column=2, sticky="w",
+                                                                                   pady=(0, 5), padx=(30, 0))
+        self.entry_area = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: 25")
         self.entry_area.grid(row=1, column=2, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Giá thuê phòng (VNĐ)", font=("Inter", 14, "bold")).grid(row=0, column=3, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_rent = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
+        ctk.CTkLabel(form, text="Giá thuê phòng (VNĐ/tháng)", font=("Inter", 14, "bold")).grid(row=0, column=3,
+                                                                                               sticky="w", pady=(0, 5),
+                                                                                               padx=(30, 0))
+        self.entry_rent = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: 2.500.000")
         self.entry_rent.grid(row=1, column=3, sticky="ew", pady=(0, 20), padx=(30, 0))
         self.entry_rent.bind("<KeyRelease>", self._format_money)
 
         # Hàng 2
-        ctk.CTkLabel(form, text="Giá điện (VNĐ/kWh)", font=("Inter", 14, "bold")).grid(row=2, column=0, sticky="w", pady=(0, 5))
-        self.entry_elec = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
-        self.entry_elec.grid(row=3, column=0, sticky="ew")
+        ctk.CTkLabel(form, text="Giá điện (VNĐ/kWh)", font=("Inter", 14, "bold")).grid(row=2, column=0, sticky="w",
+                                                                                       pady=(0, 5))
+        self.entry_elec = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: 3.500")
+        self.entry_elec.grid(row=3, column=0, sticky="ew", pady=(0, 20))
         self.entry_elec.bind("<KeyRelease>", self._format_money)
 
-        ctk.CTkLabel(form, text="Giá nước (VNĐ/m³)", font=("Inter", 14, "bold")).grid(row=2, column=1, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_water = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
-        self.entry_water.grid(row=3, column=1, sticky="ew", padx=(30, 0))
+        ctk.CTkLabel(form, text="Giá nước (VNĐ/m³)", font=("Inter", 14, "bold")).grid(row=2, column=1, sticky="w",
+                                                                                      pady=(0, 5), padx=(30, 0))
+        self.entry_water = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                        placeholder_text="VD: 10.000")
+        self.entry_water.grid(row=3, column=1, sticky="ew", pady=(0, 20), padx=(30, 0))
         self.entry_water.bind("<KeyRelease>", self._format_money)
 
-        ctk.CTkLabel(form, text="Trạng thái", font=("Inter", 14, "bold")).grid(row=2, column=2, sticky="w", pady=(0, 5), padx=(30, 0))
+        ctk.CTkLabel(form, text="Trạng thái", font=("Inter", 14, "bold")).grid(row=2, column=2, sticky="w", pady=(0, 5),
+                                                                               padx=(30, 0))
         self.combo_status = ctk.CTkComboBox(form, values=["Trống", "Đang thuê", "Bảo trì"],
-                                           height=40, corner_radius=7, font=("Inter", 15), state="readonly")
+                                            height=40, corner_radius=7, font=("Inter", 15), state="readonly")
         self.combo_status.set("Trống")
-        self.combo_status.grid(row=3, column=2, sticky="ew", padx=(30, 0))
+        self.combo_status.grid(row=3, column=2, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Ghi chú", font=("Inter", 14, "bold")).grid(row=2, column=3, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_note = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
-        self.entry_note.grid(row=3, column=3, sticky="ew", padx=(30, 0))
+        ctk.CTkLabel(form, text="Ghi chú", font=("Inter", 14, "bold")).grid(row=2, column=3, sticky="w", pady=(0, 5),
+                                                                            padx=(30, 0))
+        self.entry_note = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: Có gác lửng, toilet riêng...")
+        self.entry_note.grid(row=3, column=3, sticky="ew", pady=(0, 20), padx=(30, 0))
 
         # Nút căn phải
         btn_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
@@ -97,7 +113,7 @@ class RoomTab(ctk.CTkFrame):
         self.tree = ttk.Treeview(table_frame, columns=columns, show="headings", height=22)
 
         headers = ["ID", "Tên phòng", "Tầng", "Diện tích", "Giá thuê/tháng", "Giá điện", "Giá nước", "Trạng thái", "Ghi chú"]
-        widths  = [80, 240, 110, 140, 200, 170, 170, 150, 520]
+        widths  = [80, 240, 110, 140, 200, 170, 170, 150, 340]
 
         for col, text, w in zip(columns, headers, widths):
             self.tree.heading(col, text=text)

@@ -28,36 +28,48 @@ class TenantTab(ctk.CTkFrame):
         form.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         # Hàng 1
-        ctk.CTkLabel(form, text="Họ và tên *", font=("Inter", 14, "bold")).grid(row=0, column=0, sticky="w", pady=(0, 5))
-        self.entry_name = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15), placeholder_text="VD: Nguyễn Văn A")
+        ctk.CTkLabel(form, text="Họ và tên *", font=("Inter", 14, "bold")).grid(row=0, column=0, sticky="w",
+                                                                                pady=(0, 5))
+        self.entry_name = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: Nguyễn Văn A")
         self.entry_name.grid(row=1, column=0, sticky="ew", pady=(0, 20))
 
-        ctk.CTkLabel(form, text="Số điện thoại", font=("Inter", 14, "bold")).grid(row=0, column=1, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_phone = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15), placeholder_text="VD: 0901234567")
+        ctk.CTkLabel(form, text="Số điện thoại", font=("Inter", 14, "bold")).grid(row=0, column=1, sticky="w",
+                                                                                  pady=(0, 5), padx=(30, 0))
+        self.entry_phone = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                        placeholder_text="VD: 0901234567 (chỉ nhập 10 số)")
         self.entry_phone.grid(row=1, column=1, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="CMND/CCCD", font=("Inter", 14, "bold")).grid(row=0, column=2, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_id = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15), placeholder_text="VD: 0123456789")
+        ctk.CTkLabel(form, text="CMND/CCCD", font=("Inter", 14, "bold")).grid(row=0, column=2, sticky="w", pady=(0, 5),
+                                                                              padx=(30, 0))
+        self.entry_id = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                     placeholder_text="VD: 012345678901 (12 số)")
         self.entry_id.grid(row=1, column=2, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Giới tính", font=("Inter", 14, "bold")).grid(row=0, column=3, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.combo_sex = ctk.CTkComboBox(form, values=["Nam", "Nữ", "Khác"], height=40, corner_radius=7, font=("Inter", 15), state="readonly")
+        ctk.CTkLabel(form, text="Giới tính", font=("Inter", 14, "bold")).grid(row=0, column=3, sticky="w", pady=(0, 5),
+                                                                              padx=(30, 0))
+        self.combo_sex = ctk.CTkComboBox(form, values=["Nam", "Nữ", "Khác"],
+                                         height=40, corner_radius=7, font=("Inter", 15), state="readonly")
         self.combo_sex.set("Nam")
         self.combo_sex.grid(row=1, column=3, sticky="ew", pady=(0, 20), padx=(30, 0))
 
         # Hàng 2
-        ctk.CTkLabel(form, text="Ngày sinh", font=("Inter", 14, "bold")).grid(row=2, column=0, sticky="w", pady=(0, 5))
-        self.cal_birth = DateEntry(form, height=40, corner_radius=7, date_pattern='dd/mm/yyyy', font=("Inter", 15))
-        self.cal_birth.grid(row=3, column=0, sticky="ew")
+        ctk.CTkLabel(form, text="Ngày sinh", font=("Inter", 14, "bold")).grid(row=2, column=0, sticky="w", pady=(20, 5))
+        self.cal_birth = DateEntry(form, height=40, corner_radius=7, date_pattern='dd/mm/yyyy', font=("Inter", 15),
+                                   selectbackground="#3b82f6", selectforeground="white")
+        self.cal_birth.grid(row=3, column=0, sticky="ew", pady=(0, 20))
 
-        ctk.CTkLabel(form, text="Địa chỉ", font=("Inter", 14, "bold")).grid(row=2, column=1, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_address = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15), placeholder_text="VD: Quận 1, TP.HCM")
-        self.entry_address.grid(row=3, column=1, sticky="ew", padx=(30, 0))
+        ctk.CTkLabel(form, text="Địa chỉ thường trú", font=("Inter", 14, "bold")).grid(row=2, column=1, sticky="w",
+                                                                                       pady=(20, 5), padx=(30, 0))
+        self.entry_address = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                          placeholder_text="VD: 123 Lê Lợi, Quận 1, TP. Hồ Chí Minh")
+        self.entry_address.grid(row=3, column=1, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Ghi chú", font=("Inter", 14, "bold")).grid(row=2, column=2, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_note = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
-        self.entry_note.grid(row=3, column=2, sticky="ew", columnspan=2, padx=(30, 0))
-
+        ctk.CTkLabel(form, text="Ghi chú", font=("Inter", 14, "bold")).grid(row=2, column=2, sticky="w", pady=(20, 5),
+                                                                            padx=(30, 0))
+        self.entry_note = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: Sinh viên trường nào...")
+        self.entry_note.grid(row=3, column=2, sticky="ew", columnspan=2, padx=(30, 0), pady=(0, 20))
         # Nút căn phải
         btn_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
         btn_frame.pack(fill="x", padx=60, pady=(10, 30))
@@ -90,7 +102,7 @@ class TenantTab(ctk.CTkFrame):
         self.tree = ttk.Treeview(table_frame, columns=columns, show="headings", height=22)
 
         headers = ["ID", "Họ tên", "Giới tính", "Điện thoại", "CMND/CCCD", "Địa chỉ", "Ngày sinh", "Ghi chú"]
-        widths  = [80, 240, 110, 160, 180, 300, 140, 500]
+        widths  = [80, 240, 110, 160, 180, 300, 140, 390]
 
         for col, text, w in zip(columns, headers, widths):
             self.tree.heading(col, text=text)

@@ -38,11 +38,11 @@ class HomeTab(ctk.CTkFrame):
         bill = get_bill_report()
 
         stats = [
-            ("Tổng phòng", room['total'], "#3b82f6"),
-            ("Đang thuê", room['occupied'], "#10b981"),
-            ("Khách thuê", tenant['active'], "#8b5cf6"),
-            ("Hợp đồng active", contract['new_this_month'] + contract['soon_expire'], "#f59e0b"),
-            ("Sắp hết hạn", contract['soon_expire'], "#ef4444"),
+            ("Tổng phòng đang có", room['total'], "#3b82f6"),
+            ("Đang được thuê", room['occupied'], "#10b981"),
+            ("Tổng khách hàng", tenant['active'], "#8b5cf6"),
+            ("Hợp đồng đang thuê", contract['new_this_month'] + contract['soon_expire'], "#f59e0b"),
+            ("Hợp đồng sắp hết hạn", contract['soon_expire'], "#ef4444"),
             ("Hóa đơn chưa thu", bill['unpaid'], "#dc2626"),
         ]
 
@@ -79,24 +79,37 @@ class HomeTab(ctk.CTkFrame):
     # Biểu đồ cột: Trống / Đang thuê / Bảo trì
     def _room_chart(self, parent):
         room = get_room_report()
+        values = [room['available'], room['occupied'], room['maintenance']]
+        total = sum(values)
+
         fig = Figure(figsize=(4.5, 3.6), dpi=100)
         ax = fig.add_subplot(111)
 
-        labels = ['Trống', 'Đang thuê', 'Bảo trì']
-        values = [room['available'], room['occupied'], room['maintenance']]
-        colors = ['#10b981', '#3b82f6', '#f59e0b']
+        if total == 0:
+            ax.text(0.5, 0.5, 'Chưa có dữ liệu phòng',
+                    ha='center', va='center', fontsize=16, color='#94a3b8')
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.spines[['top', 'bottom', 'left', 'right']].set_visible(False)
+        else:
+            labels = ['Trống', 'Đang thuê', 'Bảo trì']
+            colors = ['#10b981', '#3b82f6', '#f59e0b']
 
-        bars = ax.bar(labels, values, color=colors, width=0.6, edgecolor='black', linewidth=1.2)
+            bars = ax.bar(labels, values, color=colors, width=0.6, edgecolor='black', linewidth=1.2)
 
-        ax.set_title("Tình trạng phòng trọ", fontsize=13, fontweight='bold', pad=12, color="#1e293b")
-        ax.set_ylabel("Số lượng", fontsize=10)
-        ax.grid(True, axis='y', linestyle='--', alpha=0.4)
-        ax.set_ylim(0, max(values, default=1) * 1.3)
+            ax.set_title("Tình trạng phòng trọ", fontsize=13, fontweight='bold', pad=12, color="#1e293b")
+            ax.set_ylabel("Số lượng", fontsize=10)
+            ax.grid(True, axis='y', linestyle='--', alpha=0.4)
 
-        for bar in bars:
-            h = int(bar.get_height())
-            ax.text(bar.get_x() + bar.get_width()/2, h + max(values, default=1)*0.02,
-                    str(h), ha='center', va='bottom', fontweight='bold', fontsize=14)
+            # Tránh lỗi ylim khi tất cả bằng 0
+            max_val = max(values) if max(values) > 0 else 1
+            ax.set_ylim(0, max_val * 1.3)
+
+            for bar in bars:
+                h = int(bar.get_height())
+                if h > 0:  # Chỉ hiện số khi > 0
+                    ax.text(bar.get_x() + bar.get_width() / 2, h + max_val * 0.02,
+                            str(h), ha='center', va='bottom', fontweight='bold', fontsize=14)
 
         canvas = FigureCanvasTkAgg(fig, parent)
         canvas.get_tk_widget().pack(fill="both", expand=True, padx=14, pady=14)
@@ -111,19 +124,29 @@ class HomeTab(ctk.CTkFrame):
         fig = Figure(figsize=(4.8, 3.6), dpi=100)
         ax = fig.add_subplot(111)
 
-        ax.plot(months, revenues, 'o-', color='#10b981', linewidth=2.5, markersize=7,
-                markerfacecolor='white', markeredgewidth=2)
-        ax.fill_between(months, revenues, alpha=0.15, color='#10b981')
+        # Kiểm tra nếu không có dữ liệu hoặc tất cả doanh thu = 0
+        if not data or all(r == 0 for r in revenues):
+            ax.text(0.5, 0.5, 'Chưa có dữ liệu doanh thu',
+                    ha='center', va='center', fontsize=16, color='#94a3b8')
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.spines[['top', 'bottom', 'left', 'right']].set_visible(False)
+        else:
+            ax.plot(months, revenues, 'o-', color='#10b981', linewidth=2.5, markersize=7,
+                    markerfacecolor='white', markeredgewidth=2)
+            ax.fill_between(months, revenues, alpha=0.15, color='#10b981')
 
-        ax.set_title("Doanh thu 6 tháng (Đã thu)", fontsize=13, fontweight='bold', pad=12, color="#1e293b")
-        ax.set_ylabel("VNĐ", fontsize=10)
-        ax.grid(True, axis='y', linestyle='--', alpha=0.5)
+            ax.set_title("Doanh thu 6 tháng (Đã thu)", fontsize=13, fontweight='bold', pad=12, color="#1e293b")
+            ax.set_ylabel("VNĐ", fontsize=10)
+            ax.grid(True, axis='y', linestyle='--', alpha=0.5)
 
-        max_rev = max(revenues, default=1)
-        for i, v in enumerate(revenues):
-            if v > 0:
-                ax.text(i, v + max_rev*0.05, f"{v:,}đ".replace(",", "."),
-                        ha='center', va='bottom', fontweight='bold', fontsize=10)
+            max_rev = max(revenues) if max(revenues) > 0 else 1
+            ax.set_ylim(0, max_rev * 1.3)
+
+            for i, v in enumerate(revenues):
+                if v > 0:
+                    ax.text(i, v + max_rev * 0.05, f"{v:,}đ".replace(",", "."),
+                            ha='center', va='bottom', fontweight='bold', fontsize=10)
 
         canvas = FigureCanvasTkAgg(fig, parent)
         canvas.get_tk_widget().pack(fill="both", expand=True, padx=14, pady=14)

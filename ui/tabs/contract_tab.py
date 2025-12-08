@@ -27,7 +27,6 @@ class ContractTab(ctk.CTkFrame):
         self._load_data()
         self._refresh_comboboxes()
 
-    # Xây dựng toàn bộ giao diện form + bảng danh sách hợp đồng
     def _build_ui(self):
         ctk.CTkLabel(self, text="QUẢN LÝ HỢP ĐỒNG THUÊ PHÒNG", font=("Inter", 28, "bold"), text_color="#2756B5")\
             .pack(pady=(30, 20))
@@ -40,49 +39,69 @@ class ContractTab(ctk.CTkFrame):
         form.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         # === HÀNG 1 ===
-        ctk.CTkLabel(form, text="Phòng *", font=("Inter", 14, "bold")).grid(row=0, column=0, sticky="w", pady=(0, 5))
+        ctk.CTkLabel(form, text="Phòng thuê *", font=("Inter", 14, "bold")).grid(row=0, column=0, sticky="w",
+                                                                                 pady=(0, 5))
         self.combo_room = ctk.CTkComboBox(form, values=[], state="readonly", height=40, corner_radius=7,
-                                         font=("Inter", 15), command=self._on_room_selected)
+                                          font=("Inter", 15), command=self._on_room_selected)
         self.combo_room.grid(row=1, column=0, sticky="ew", pady=(0, 20))
 
-        ctk.CTkLabel(form, text="Khách thuê *", font=("Inter", 14, "bold")).grid(row=0, column=1, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.combo_tenant = ctk.CTkComboBox(form, values=[], state="readonly", height=40, corner_radius=7, font=("Inter", 15))
+        ctk.CTkLabel(form, text="Khách thuê *", font=("Inter", 14, "bold")).grid(row=0, column=1, sticky="w",
+                                                                                 pady=(0, 5), padx=(30, 0))
+        self.combo_tenant = ctk.CTkComboBox(form, values=[], state="readonly", height=40, corner_radius=7,
+                                            font=("Inter", 15))
         self.combo_tenant.grid(row=1, column=1, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Tiền thuê/tháng *", font=("Inter", 14, "bold")).grid(row=0, column=2, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_rent = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
+        # Tiền thuê/tháng
+        ctk.CTkLabel(form, text="Tiền thuê/tháng *", font=("Inter", 14, "bold")).grid(row=0, column=2, sticky="w",
+                                                                                      pady=(0, 5), padx=(30, 0))
+        self.entry_rent = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       state="readonly", fg_color="#f1f5f9", text_color="#1e293b",
+                                       border_color="#cbd5e1", placeholder_text="Tự động lấy từ phòng")
         self.entry_rent.grid(row=1, column=2, sticky="ew", pady=(0, 20), padx=(30, 0))
-        self.entry_rent.bind("<KeyRelease>", lambda e: self._format_money(self.entry_rent))
 
-        ctk.CTkLabel(form, text="Tiền cọc", font=("Inter", 14, "bold")).grid(row=0, column=3, sticky="w", pady=(0, 5), padx=(30, 0))
-        self.entry_deposit = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
+        ctk.CTkLabel(form, text="Tiền cọc (để trống nếu không cọc)", font=("Inter", 14, "bold")).grid(row=0, column=3, sticky="w", pady=(0, 5),
+                                                                             padx=(30, 0))
+        self.entry_deposit = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                          placeholder_text="VD: 500.000")
         self.entry_deposit.grid(row=1, column=3, sticky="ew", pady=(0, 20), padx=(30, 0))
         self.entry_deposit.bind("<KeyRelease>", lambda e: self._format_money(self.entry_deposit))
 
         # === HÀNG 2 ===
-        ctk.CTkLabel(form, text="Ngày nhận phòng *", font=("Inter", 14, "bold")).grid(row=2, column=0, sticky="w", pady=(15, 5))
-        self.cal_start = DateEntry(form, date_pattern='dd/mm/yyyy', height=40, font=("Inter", 15), corner_radius=7)
+        ctk.CTkLabel(form, text="Ngày nhận phòng *", font=("Inter", 14, "bold")).grid(row=2, column=0, sticky="w",
+                                                                                      pady=(15, 5))
+        self.cal_start = DateEntry(form, date_pattern='dd/mm/yyyy', height=40, font=("Inter", 15), corner_radius=7,
+                                   selectbackground="#3b82f6", selectforeground="white")
         self.cal_start.grid(row=3, column=0, sticky="ew", pady=(0, 20))
 
-        ctk.CTkLabel(form, text="Ngày kết thúc", font=("Inter", 14, "bold")).grid(row=2, column=1, sticky="w", pady=(15, 5), padx=(30, 0))
-        self.cal_end = DateEntry(form, date_pattern='dd/mm/yyyy', height=40, font=("Inter", 15), corner_radius=7)
+        ctk.CTkLabel(form, text="Ngày kết thúc", font=("Inter", 14, "bold")).grid(row=2, column=1, sticky="w",
+                                                                                  pady=(15, 5), padx=(30, 0))
+        self.cal_end = DateEntry(form, date_pattern='dd/mm/yyyy', height=40, font=("Inter", 15), corner_radius=7,
+                                 selectbackground="#10b981", selectforeground="white")
         self.cal_end.grid(row=3, column=1, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Ngày đặt cọc", font=("Inter", 14, "bold")).grid(row=2, column=2, sticky="w", pady=(15, 5), padx=(30, 0))
-        self.cal_deposit = DateEntry(form, date_pattern='dd/mm/yyyy', height=40, font=("Inter", 15), corner_radius=7)
+        ctk.CTkLabel(form, text="Ngày đặt cọc", font=("Inter", 14, "bold")).grid(row=2, column=2, sticky="w",
+                                                                                 pady=(15, 5), padx=(30, 0))
+        self.cal_deposit = DateEntry(form, date_pattern='dd/mm/yyyy', height=40, font=("Inter", 15), corner_radius=7,
+                                     selectbackground="#f59e0b", selectforeground="white")
         self.cal_deposit.grid(row=3, column=2, sticky="ew", pady=(0, 20), padx=(30, 0))
 
-        ctk.CTkLabel(form, text="Đồng hồ điện (kWh)", font=("Inter", 14, "bold")).grid(row=2, column=3, sticky="w", pady=(15, 5), padx=(30, 0))
-        self.entry_elec = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15), placeholder_text="VD: 1250")
+        ctk.CTkLabel(form, text="Đồng hồ điện (kWh)", font=("Inter", 14, "bold")).grid(row=2, column=3, sticky="w",
+                                                                                       pady=(15, 5), padx=(30, 0))
+        self.entry_elec = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: 1250 (số ban đầu)")
         self.entry_elec.grid(row=3, column=3, sticky="ew", pady=(0, 20), padx=(30, 0))
 
         # === HÀNG 3 ===
-        ctk.CTkLabel(form, text="Đồng hồ nước (m³)", font=("Inter", 14, "bold")).grid(row=4, column=0, sticky="w", pady=(15, 5))
-        self.entry_water = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15), placeholder_text="VD: 15")
+        ctk.CTkLabel(form, text="Đồng hồ nước (m³)", font=("Inter", 14, "bold")).grid(row=4, column=0, sticky="w",
+                                                                                      pady=(15, 5))
+        self.entry_water = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                        placeholder_text="VD: 15 (số ban đầu)")
         self.entry_water.grid(row=5, column=0, sticky="ew", pady=(0, 20))
 
-        ctk.CTkLabel(form, text="Ghi chú", font=("Inter", 14, "bold")).grid(row=4, column=1, sticky="w", pady=(15, 5), padx=(30, 0), columnspan=3)
-        self.entry_note = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15))
+        ctk.CTkLabel(form, text="Ghi chú", font=("Inter", 14, "bold")).grid(row=4, column=1, sticky="w", pady=(15, 5),
+                                                                            padx=(30, 0), columnspan=3)
+        self.entry_note = ctk.CTkEntry(form, height=40, corner_radius=7, font=("Inter", 15),
+                                       placeholder_text="VD: Hợp đồng 12 tháng, không nuôi thú cưng, thanh toán trước ngày 5...")
         self.entry_note.grid(row=5, column=1, sticky="ew", columnspan=3, padx=(30, 0), pady=(0, 20))
 
         # === NÚT CĂN PHẢI ===
@@ -113,19 +132,20 @@ class ContractTab(ctk.CTkFrame):
                                       command=self._reset_form)
         self.btn_reset.pack(side="right", padx=8)
 
-        # === BẢNG DANH SÁCH HỢP ĐỒNG ===
+        # === BẢNG DANH SÁCH HỢP ĐỒNG - ĐÃ THÊM 2 CỘT ===
         table_frame = ctk.CTkFrame(self)
         table_frame.pack(fill="both", expand=True, padx=50, pady=(0, 40))
 
-        columns = ("id", "room", "tenant", "start", "rent", "status")
+        columns = ("id", "room", "tenant", "start", "end", "rent", "status")
         self.tree = ttk.Treeview(table_frame, columns=columns, show="headings", height=22)
 
-        headers = ["ID", "Phòng", "Khách thuê", "Nhận phòng", "Tiền thuê", "Trạng thái"]
-        widths  = [80, 150, 320, 140, 180, 130]
+        headers = ["ID", "Phòng thuê", "Khách thuê", "Nhận phòng", "Kết thúc", "Tiền thuê/tháng", "Trạng thái"]
+        widths  = [80, 150, 300, 130, 130, 180, 200]
 
         for col, text, w in zip(columns, headers, widths):
             self.tree.heading(col, text=text)
-            self.tree.column(col, width=w, anchor="center" if col != "tenant" else "w")
+            anchor = "w" if col in ["tenant", "room"] else "center"
+            self.tree.column(col, width=w, anchor=anchor)
 
         style = ttk.Style()
         style.configure("Treeview", font=("Inter", 13), rowheight=52)
@@ -138,14 +158,105 @@ class ContractTab(ctk.CTkFrame):
 
         self.tree.bind("<<TreeviewSelect>>", self._on_select)
 
-    # Format tiền tự động khi nhập (thêm dấu chấm)
+    # Format tiền khi nhập (dùng cho tiền cọc)
     def _format_money(self, widget):
         val = widget.get().replace(".", "").replace(" ", "")
         if val.isdigit():
             widget.delete(0, "end")
             widget.insert(0, format_currency(int(val)))
 
-    # Load lại combobox phòng trống + khách chưa có hợp đồng
+    # Khi chọn phòng → tự động điền tiền thuê
+    def _on_room_selected(self, value=None):
+        if not self.combo_room.get():
+            return
+        try:
+            room_id = int(self.combo_room.get().split(" - ")[0])
+            room = get_room_by_id(room_id)
+            if room:
+                self.entry_rent.configure(state="normal")
+                self.entry_rent.delete(0, "end")
+                self.entry_rent.insert(0, format_currency(room["base_rent"]))
+                self.entry_rent.configure(state="readonly")
+
+                self.entry_elec.delete(0, "end")
+                self.entry_elec.insert(0, "0")
+                self.entry_water.delete(0, "end")
+                self.entry_water.insert(0, "0")
+        except:
+            pass
+
+    # Load dữ liệu hợp đồng vào bảng
+    def _load_data(self):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+        for c in get_all_contracts():
+            status = "Đang thuê" if c["contract_status"] == "active" else "Đã kết thúc"
+            start = datetime.strptime(c["start_ymd"], "%Y-%m-%d").strftime("%d/%m/%Y") if c["start_ymd"] else ""
+            end = datetime.strptime(c["end_ymd"], "%Y-%m-%d").strftime("%d/%m/%Y") if c["end_ymd"] else "Chưa xác định"
+
+            self.tree.insert("", "end", values=(
+                c["contract_id"],
+                c["name_room"],
+                c["full_name"],
+                start,
+                end,
+                format_currency(c["rent"]),
+                status
+            ))
+
+    # Click vào dòng → fill form
+    def _on_select(self, event):
+        sel = self.tree.selection()
+        if not sel:
+            return
+        v = self.tree.item(sel[0])["values"]
+        self.current_contract_id = v[0]
+        self.is_editing = True
+
+        contract = get_contract_by_id(self.current_contract_id)
+        if not contract:
+            return
+
+        room_text = f"{contract['room_id']:02d} - {v[1]}"
+        tenant_text = f"{contract['tenant_id']:02d} - {v[2]}"
+
+        self.combo_room.set(room_text)
+        self.combo_tenant.set(tenant_text)
+
+        # Fill tiền thuê (dù đang readonly)
+        self.entry_rent.configure(state="normal")
+        self.entry_rent.delete(0, "end")
+        self.entry_rent.insert(0, format_currency(contract["rent"]))
+        self.entry_rent.configure(state="readonly")
+
+        self.entry_deposit.delete(0, "end")
+        self.entry_deposit.insert(0, format_currency(contract["deposit_amount"] or 0))
+        self.entry_elec.delete(0, "end")
+        self.entry_elec.insert(0, str(contract["electric_meter_start"] or 0))
+        self.entry_water.delete(0, "end")
+        self.entry_water.insert(0, str(contract["water_meter_start"] or 0))
+        self.entry_note.delete(0, "end")
+        self.entry_note.insert(0, contract["note"] or "")
+
+        if contract["start_ymd"]:
+            self.cal_start.set_date(datetime.strptime(contract["start_ymd"], "%Y-%m-%d"))
+        if contract["end_ymd"]:
+            self.cal_end.set_date(datetime.strptime(contract["end_ymd"], "%Y-%m-%d"))
+        else:
+            self.cal_end.set_date(None)
+        if contract["deposit_ymd"]:
+            self.cal_deposit.set_date(datetime.strptime(contract["deposit_ymd"], "%Y-%m-%d"))
+
+        self.btn_save.pack_forget()
+        self.btn_update.pack(side="right", padx=8)
+        self.btn_delete.pack(side="right", padx=8)
+        self.btn_print.pack(side="right", padx=8)
+        if contract["contract_status"] == "active":
+            self.btn_end.pack(side="right", padx=8)
+        else:
+            self.btn_end.pack_forget()
+
     def _refresh_comboboxes(self):
         rooms = get_available_rooms()
         tenants = get_tenants_without_active_contract()
@@ -158,79 +269,8 @@ class ContractTab(ctk.CTkFrame):
 
         if not self.is_editing and len(room_list) == 1:
             self.combo_room.set(room_list[0])
-            self._on_room_selected(room_list[0])
+            self._on_room_selected()
 
-    # Khi chọn phòng → tự fill tiền thuê + đồng hồ = 0
-    def _on_room_selected(self, value=None):
-        if not self.combo_room.get(): return
-        room_id = int(self.combo_room.get().split(" - ")[0])
-        room = get_room_by_id(room_id)
-        if room:
-            self.entry_rent.delete(0, "end")
-            self.entry_rent.insert(0, format_currency(room["base_rent"]))
-            self.entry_elec.delete(0, "end"); self.entry_elec.insert(0, "0")
-            self.entry_water.delete(0, "end"); self.entry_water.insert(0, "0")
-
-    # Load toàn bộ hợp đồng vào bảng
-    def _load_data(self):
-        for i in self.tree.get_children(): self.tree.delete(i)
-        for c in get_all_contracts():
-            status = "Đang thuê" if c["contract_status"] == "active" else "Đã kết thúc"
-            start = datetime.strptime(c["start_ymd"], "%Y-%m-%d").strftime("%d/%m/%Y") if c["start_ymd"] else ""
-            self.tree.insert("", "end", values=(
-                c["contract_id"], c["name_room"], c["full_name"],
-                start, format_currency(c["rent"]), status
-            ))
-
-    # Click vào dòng → fill form + hiện nút sửa/xóa/in/kết thúc
-    def _on_select(self, event):
-        sel = self.tree.selection()
-        if not sel: return
-        v = self.tree.item(sel[0])["values"]
-        self.current_contract_id = v[0]
-        self.is_editing = True
-
-        contract = get_contract_by_id(self.current_contract_id)
-        if not contract: return
-
-        room_text = f"{contract['room_id']:02d} - {v[1]}"
-        tenant_text = f"{contract['tenant_id']:02d} - {v[2]}"
-
-        self.combo_room.set(room_text)
-        self.combo_tenant.set(tenant_text)
-        self.entry_rent.delete(0, "end")
-        self.entry_rent.insert(0, format_currency(contract["rent"]))
-        self.entry_deposit.delete(0, "end")
-        self.entry_deposit.insert(0, format_currency(contract["deposit_amount"] or 0))
-        self.entry_elec.delete(0, "end")
-        self.entry_elec.insert(0, str(contract["electric_meter_start"] or 0))
-        self.entry_water.delete(0, "end")
-        self.entry_water.insert(0, str(contract["water_meter_start"] or 0))
-        self.entry_note.delete(0, "end")
-        self.entry_note.insert(0, contract["note"] or "")
-
-        if contract["start_ymd"]:
-            try: self.cal_start.set_date(datetime.strptime(contract["start_ymd"], "%Y-%m-%d"))
-            except: pass
-        if contract["end_ymd"]:
-            try: self.cal_end.set_date(datetime.strptime(contract["end_ymd"], "%Y-%m-%d"))
-            except: self.cal_end.set_date(None)
-        else:
-            self.cal_end.set_date(None)
-        if contract["deposit_ymd"]:
-            try: self.cal_deposit.set_date(datetime.strptime(contract["deposit_ymd"], "%Y-%m-%d"))
-            except: pass
-
-        self.btn_save.pack_forget()
-        self.btn_update.pack(side="right", padx=8)
-        self.btn_delete.pack(side="right", padx=8)
-        self.btn_print.pack(side="right", padx=8)
-        if contract["contract_status"] == "active":
-            self.btn_end.pack(side="right", padx=8)
-        else:
-            self.btn_end.pack_forget()
-
-    # Reset form về trạng thái lập hợp đồng mới
     def _reset_form(self):
         self.current_contract_id = None
         self.is_editing = False
@@ -243,7 +283,9 @@ class ContractTab(ctk.CTkFrame):
 
         self.combo_room.set("")
         self.combo_tenant.set("")
+        self.entry_rent.configure(state="normal")
         self.entry_rent.delete(0, "end")
+        self.entry_rent.configure(state="readonly")
         self.entry_deposit.delete(0, "end")
         self.entry_elec.delete(0, "end"); self.entry_elec.insert(0, "0")
         self.entry_water.delete(0, "end"); self.entry_water.insert(0, "0")
@@ -256,7 +298,6 @@ class ContractTab(ctk.CTkFrame):
         self.tree.selection_remove(self.tree.selection())
         self._refresh_comboboxes()
 
-    # Lập hợp đồng mới
     def _save_contract(self):
         if not self.combo_room.get() or not self.combo_tenant.get():
             messagebox.showwarning("Lỗi", "Vui lòng chọn phòng và khách thuê!")
@@ -284,9 +325,9 @@ class ContractTab(ctk.CTkFrame):
         self._refresh_comboboxes()
         self._reset_form()
 
-    # Cập nhật hợp đồng đang chọn
     def _update_contract(self):
-        if not self.current_contract_id: return
+        if not self.current_contract_id:
+            return
         room_id = int(self.combo_room.get().split(" - ")[0])
         tenant_id = int(self.combo_tenant.get().split(" - ")[0])
 
@@ -306,7 +347,6 @@ class ContractTab(ctk.CTkFrame):
         self._load_data()
         self._reset_form()
 
-    # Xóa hợp đồng
     def _delete_contract(self):
         if messagebox.askyesno("Xác nhận", "Xóa hợp đồng này?\n(Dữ liệu sẽ bị ẩn, không thể khôi phục dễ dàng)"):
             delete_contract(self.current_contract_id)
@@ -315,9 +355,9 @@ class ContractTab(ctk.CTkFrame):
             self._refresh_comboboxes()
             self._reset_form()
 
-    # In hợp đồng ra PDF + mở file
     def _print_contract(self):
-        if not self.current_contract_id: return
+        if not self.current_contract_id:
+            return
         contract = get_contract_by_id(self.current_contract_id)
         room = get_room_by_id(contract["room_id"])
         tenant = get_tenant_by_id(contract["tenant_id"])
@@ -328,7 +368,6 @@ class ContractTab(ctk.CTkFrame):
         except Exception as e:
             messagebox.showerror("Lỗi", f"Không thể in hợp đồng:\n{e}")
 
-    # Kết thúc hợp đồng + trả phòng về trống
     def _end_contract(self):
         if messagebox.askyesno("Xác nhận", "Kết thúc hợp đồng này?\nPhòng sẽ được trả về trạng thái Trống."):
             end_contract(self.current_contract_id)
