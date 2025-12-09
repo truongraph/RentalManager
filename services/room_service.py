@@ -2,12 +2,10 @@
 from database.db import get_db
 from utils.formatter import format_currency
 
-# Dịch trạng thái
 STATUS_EN = {"Trống": "available", "Đang thuê": "occupied", "Bảo trì": "maintenance"}
 STATUS_VN = {v: k for k, v in STATUS_EN.items()}
 
 
-# Lấy danh sách tất cả phòng chưa xóa
 def get_all_rooms():
     conn = get_db()
     return conn.execute(
@@ -28,7 +26,6 @@ def get_all_rooms():
     ).fetchall()
 
 
-# Thêm phòng mới
 def create_room(data: dict):
     conn = get_db()
     conn.execute(
@@ -54,7 +51,6 @@ def create_room(data: dict):
     conn.commit()
 
 
-# Cập nhật thông tin phòng
 def update_room(room_id: int, data: dict):
     conn = get_db()
     conn.execute(
@@ -85,7 +81,6 @@ def update_room(room_id: int, data: dict):
     conn.commit()
 
 
-# Xóa phòng (không cho xóa nếu đang có hợp đồng active)
 def delete_room(room_id: int):
     conn = get_db()
     active_contract = conn.execute(
@@ -103,13 +98,11 @@ def delete_room(room_id: int):
     conn.commit()
 
 
-# Lấy chi tiết 1 phòng theo ID
 def get_room_by_id(room_id: int):
     conn = get_db()
     return conn.execute("SELECT * FROM room WHERE room_id = ?", (room_id,)).fetchone()
 
 
-# Lấy danh sách phòng trống
 def get_available_rooms():
     conn = get_db()
     return conn.execute(

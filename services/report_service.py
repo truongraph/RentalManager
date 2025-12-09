@@ -3,7 +3,6 @@ from database.db import get_db
 from datetime import datetime, timedelta
 
 
-# Thống kê tổng quan phòng: tổng / đang thuê / trống / bảo trì
 def get_room_report():
     conn = get_db()
     total = conn.execute("SELECT COUNT(*) FROM room WHERE is_deleted = 0").fetchone()[0]
@@ -22,7 +21,6 @@ def get_room_report():
     }
 
 
-# Thống kê khách thuê: đang ở + mới trong tháng hiện tại
 def get_tenant_report():
     conn = get_db()
     active = conn.execute(
@@ -48,7 +46,6 @@ def get_tenant_report():
     return {"active": active, "new_this_month": new_this_month}
 
 
-# Thống kê hợp đồng: mới tháng này / sắp hết hạn 30 ngày tới / đã kết thúc
 def get_contract_report():
     conn = get_db()
     today = datetime.now().date()
@@ -82,7 +79,6 @@ def get_contract_report():
     }
 
 
-# Thống kê hóa đơn: chưa thu / đã thu / tổng
 def get_bill_report():
     conn = get_db()
     unpaid = conn.execute(
@@ -94,7 +90,6 @@ def get_bill_report():
     return {"unpaid": unpaid, "paid": paid, "total": unpaid + paid}
 
 
-# Doanh thu 6 tháng gần nhất (đã thu tiền), tháng thiếu tự fill 0
 def get_revenue_last_6_months():
     conn = get_db()
     rows = conn.execute(

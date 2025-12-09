@@ -1,7 +1,5 @@
 from database.db import get_db
 
-
-# Kiểm tra login: username + password
 def authenticate_user(username: str, password: str):
     conn = get_db()
     return conn.execute(

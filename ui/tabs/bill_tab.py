@@ -44,7 +44,6 @@ class BillTab(ctk.CTkFrame):
         form.pack(fill="x", padx=60, pady=35)
         form.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
-        # Hàng 1
         ctk.CTkLabel(form, text="Hợp đồng *", font=("Inter", 14, "bold")).grid(
             row=0, column=0, sticky="w", pady=(0, 5)
         )
@@ -101,7 +100,7 @@ class BillTab(ctk.CTkFrame):
         )
         self.entry_water_new.bind("<KeyRelease>", lambda e: self._calculate_total())
 
-        # Hàng 2 - Các ô KHÓA (readonly) nhưng vẫn là Entry cho đẹp
+        #=====================================
         ctk.CTkLabel(form, text="Đồng hồ điện cũ", font=("Inter", 14, "bold")).grid(
             row=2, column=0, sticky="w", pady=(20, 5)
         )
@@ -162,7 +161,7 @@ class BillTab(ctk.CTkFrame):
         )
         self.entry_other_fee.bind("<KeyRelease>", lambda e: self._calculate_total())
 
-        # Tổng tiền
+        #=====================================
         total_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
         total_frame.pack(pady=(10, 10), padx=60, anchor="e")
         ctk.CTkLabel(total_frame, text="TỔNG CỘNG:", font=("Inter", 18, "bold")).pack(
@@ -173,7 +172,7 @@ class BillTab(ctk.CTkFrame):
         )
         self.lbl_total.pack(side="left", padx=(15, 0))
 
-        # Ghi chú
+        #=====================================
         note_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
         note_frame.pack(fill="x", padx=60, pady=(0, 20))
         ctk.CTkLabel(note_frame, text="Ghi chú:", font=("Inter", 14, "bold")).pack(
@@ -188,7 +187,7 @@ class BillTab(ctk.CTkFrame):
         )
         self.entry_note.pack(side="left", fill="x", expand=True, padx=(10, 0))
 
-        # Nút
+        #=====================================
         btn_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
         btn_frame.pack(fill="x", padx=60, pady=(10, 30))
         btn_right = ctk.CTkFrame(btn_frame, fg_color="transparent")
@@ -257,7 +256,7 @@ class BillTab(ctk.CTkFrame):
         )
         self.btn_reset.pack(side="right", padx=8)
 
-        # Bảng danh sách hóa đơn
+        #=====================================
         table_frame = ctk.CTkFrame(self)
         table_frame.pack(fill="both", expand=True, padx=50, pady=(0, 40))
 
@@ -316,7 +315,6 @@ class BillTab(ctk.CTkFrame):
                 if c["contract_id"] == contract_id
             )
 
-            # Fill các ô readonly
             self.entry_elec_prev.configure(state="normal")
             self.entry_elec_prev.delete(0, "end")
             self.entry_elec_prev.insert(0, str(contract["elec_prev"]))
@@ -368,7 +366,6 @@ class BillTab(ctk.CTkFrame):
             self.lbl_total.configure(text="0 VNĐ")
 
     def _save_bill(self):
-        # BẮT BUỘC NHẬP ĐIỆN MỚI + NƯỚC MỚI
         if not self.combo_contract.get():
             messagebox.showwarning("Thiếu", "Vui lòng chọn hợp đồng!")
             return
@@ -425,7 +422,6 @@ class BillTab(ctk.CTkFrame):
 
     def _update_bill(self):
         messagebox.showinfo("Info", "Chức năng cập nhật đang được hoàn thiện!")
-        # Có thể mở rộng sau
 
     def _delete_bill(self):
         if messagebox.askyesno("Xác nhận", "Xóa hóa đơn này?"):
@@ -473,7 +469,6 @@ class BillTab(ctk.CTkFrame):
         self.entry_note.delete(0, "end")
         self.entry_note.insert(0, bill["note"] or "")
 
-        # Fill readonly fields
         self.entry_elec_prev.configure(state="normal")
         self.entry_elec_prev.delete(0, "end")
         self.entry_elec_prev.insert(0, str(bill["elec_prev"]))

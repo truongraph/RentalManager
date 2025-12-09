@@ -2,7 +2,6 @@
 from database.db import get_db
 
 
-# Lấy toàn bộ hợp đồng (kèm tên phòng + tên khách)
 def get_all_contracts():
     conn = get_db()
     return conn.execute(
@@ -17,7 +16,6 @@ def get_all_contracts():
     ).fetchall()
 
 
-# Đếm số hợp đồng đang active
 def get_active_contract_count():
     conn = get_db()
     row = conn.execute(
@@ -26,7 +24,6 @@ def get_active_contract_count():
     return row[0] if row else 0
 
 
-# Tạo hợp đồng mới + chuyển phòng sang occupied
 def create_contract(data: dict):
     conn = get_db()
     conn.execute(
@@ -57,7 +54,6 @@ def create_contract(data: dict):
     conn.commit()
 
 
-# Cập nhật thông tin hợp đồng
 def update_contract(contract_id: int, data: dict):
     conn = get_db()
     conn.execute(
@@ -85,7 +81,6 @@ def update_contract(contract_id: int, data: dict):
     conn.commit()
 
 
-# Xóa hợp đồng + nếu đang active thì trả phòng về available
 def delete_contract(contract_id: int):
     conn = get_db()
     room_id = conn.execute(
@@ -105,7 +100,6 @@ def delete_contract(contract_id: int):
     conn.commit()
 
 
-# Kết thúc hợp đồng + trả phòng về available
 def end_contract(contract_id: int):
     conn = get_db()
     room_id = conn.execute(
@@ -122,7 +116,6 @@ def end_contract(contract_id: int):
     conn.commit()
 
 
-# Lấy chi tiết 1 hợp đồng theo ID
 def get_contract_by_id(contract_id: int):
     conn = get_db()
     return conn.execute(
@@ -130,7 +123,6 @@ def get_contract_by_id(contract_id: int):
     ).fetchone()
 
 
-# Lấy danh sách phòng trống để lập hợp đồng
 def get_available_rooms():
     conn = get_db()
     return conn.execute(
@@ -143,7 +135,6 @@ def get_available_rooms():
     ).fetchall()
 
 
-# Lấy khách chưa có hợp đồng active (dùng khi tạo hợp đồng mới)
 def get_tenants_without_active_contract():
     conn = get_db()
     return conn.execute(

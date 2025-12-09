@@ -2,8 +2,6 @@
 from database.db import get_db
 from datetime import datetime
 
-
-# Lấy toàn bộ hóa đơn (kèm tên phòng + tên khách)
 def get_all_bills():
     conn = get_db()
     return conn.execute(
@@ -19,7 +17,6 @@ def get_all_bills():
     ).fetchall()
 
 
-# Lấy hợp đồng đang active + số điện/nước kỳ trước để tạo hóa đơn mới
 def get_active_contracts_with_last_bill():
     conn = get_db()
     return conn.execute(
@@ -50,7 +47,6 @@ def get_active_contracts_with_last_bill():
     ).fetchall()
 
 
-# Tính tháng hóa đơn kế tiếp cho hợp đồng
 def get_next_bill_month(contract_id: int) -> str:
     conn = get_db()
     row = conn.execute(
@@ -76,7 +72,6 @@ def get_next_bill_month(contract_id: int) -> str:
     return f"{next_month:02d}/{next_year}"
 
 
-# Kiểm tra hóa đơn tháng đó đã tồn tại chưa
 def bill_exists(contract_id: int, bill_month: str) -> bool:
     conn = get_db()
     row = conn.execute(
@@ -88,7 +83,6 @@ def bill_exists(contract_id: int, bill_month: str) -> bool:
     return row is not None
 
 
-# Tạo hóa đơn mới – tự tính tổng tiền
 def create_bill(data: dict):
     conn = get_db()
     total = (
@@ -126,7 +120,6 @@ def create_bill(data: dict):
     conn.commit()
 
 
-# Cập nhật hóa đơn – tính lại tổng tiền
 def update_bill(bill_id: int, data: dict):
     conn = get_db()
     total = (
@@ -162,14 +155,13 @@ def update_bill(bill_id: int, data: dict):
     conn.commit()
 
 
-# Xóa hóa đơn
+
 def delete_bill(bill_id: int):
     conn = get_db()
     conn.execute("UPDATE bill SET is_deleted = 1 WHERE bill_id = ?", (bill_id,))
     conn.commit()
 
 
-# Đánh dấu hóa đơn đã thu tiền
 def mark_bill_paid(bill_id: int):
     conn = get_db()
     conn.execute(
