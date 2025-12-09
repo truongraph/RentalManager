@@ -1,0 +1,24 @@
+# .gitignore
+
+# 1. Loại bỏ tất cả thư mục __pycache__
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py.class
+
+# 2. Loại bỏ file database (SQLite)
+rental_manager.db
+*.db
+*.sqlite
+*.sqlite3
+
+# 3. (Tùy chọn) Loại bỏ venv và file môi trường
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

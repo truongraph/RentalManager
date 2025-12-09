@@ -9,6 +9,7 @@ from ui.tabs.home_tab import HomeTab
 from ui.tabs.report_tab import ReportTab
 from utils.auth_state import clear_login_state
 
+
 # =====================================#
 # =====================================#
 # =====================================#
