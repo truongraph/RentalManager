@@ -23,20 +23,12 @@ from config import PDF_OUTPUT_DIR, FONT_PATH
 # =====================================#
 # =====================================#
 def register_fonts():
-    regular_path = FONT_PATH
-    bold_path = FONT_PATH.replace(".ttf", "-Bold.ttf")
-
-    if os.path.exists(regular_path):
-        pdfmetrics.registerFont(TTFont("Inter", regular_path))
-    else:
-        print("[PDF] Không tìm thấy Inter.ttf")
-
-    if os.path.exists(bold_path):
-        pdfmetrics.registerFont(TTFont("Inter-Bold", bold_path))
-        print("[PDF] Đã đăng ký Inter-Bold")
-    else:
-        print("[PDF] Không tìm thấy Inter-Bold.ttf → dùng Inter thường cho chữ đậm")
-
+    regular = FONT_PATH
+    bold = FONT_PATH.replace(".ttf", "-Bold.ttf")
+    if os.path.exists(regular):
+        pdfmetrics.registerFont(TTFont("Inter", regular))
+    if os.path.exists(bold):
+        pdfmetrics.registerFont(TTFont("Inter-Bold", bold))
 
 # =====================================#
 # =====================================#

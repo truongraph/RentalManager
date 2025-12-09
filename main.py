@@ -15,6 +15,7 @@ def signal_handler(sig, frame):
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
     try:
+        print(f"\nĐang khởi chạy app")
         register_font()
         app = LoginPage()
         app.mainloop()
@@ -26,4 +27,4 @@ if __name__ == "__main__":
         traceback.print_exc()
         sys.exit(1)
     finally:
-        print("Chương trình đã được đóng")
+        print("App đã đóng")
