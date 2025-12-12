@@ -22,8 +22,6 @@ build/
 dist/
 *.spec
 
-# 5. JetBrains IDE (PyCharm, IntelliJ, etc.)
-.idea/
 
 # 6. OS specific files
 .DS_Store
